@@ -1,20 +1,11 @@
 #include <stdio.h>
-#include "lexer.h"
+#include "ast.h"
 
 int main(int argc, char* argv[])
 {
-	Lexer lexer;
+	ASTNode* tree = ast_binary(TOKEN_PLUS, ast_number(3), ast_binary(TOKEN_MUL, ast_number(4), ast_number(2)));
 
-	lexer_init(&lexer, "3+4*2");
-
-	Token t;
-
-	do
-	{
-		t = lexer_next_token(&lexer);
-
-		printf("type = %d, value = %f \n", t.type, t.value);
-	}while (t.type != TOKEN_EOF);
-
+	ast_print(tree, 0);
+	//ast_free(tree);
 	return 0;
 }
