@@ -26,6 +26,16 @@ ASTNode *ast_binary(TokenType op, ASTNode* left, ASTNode *right)
 	return node;
 }
 
+ASTNode *ast_unary(TokenType op, ASTNode *operand)
+{
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = AST_UNARY;
+	node->unary.op = op;
+	node->unary.operand = operand;
+
+	return node;
+}
+
 static void indent(int depth)
 {
 	while(depth--)
@@ -65,6 +75,9 @@ void ast_print(ASTNode* node, int depth)
 				case TOKEN_DIV:
 					printf("/\n");
 					break;
+				case TOKEN_POW:
+					printf("^\n");
+					break;
 
 				default:
 					printf("?\n");
@@ -83,21 +96,22 @@ void ast_free(ASTNode *node)
 	if(!node)
 		return;
 
-	if (node->type == AST_BINARY)
+	switch(node->type)
 	{
-		ast_free(node->binary.left);
-		ast_free(node->binary.right);
+		case AST_BINARY:
+			ast_free(node->binary.left);
+			ast_free(node->binary.right);
+			break;
+
+		case AST_UNARY:
+			ast_free(node->unary.operand);
+			break;
+
+		default:
+			break;
 	}
 
 	free(node);
 }
 
-ASTNode *ast_unary(TokenType op, ASTNode *operand)
-{
-	ASTNode *node = malloc(sizeof(ASTNode));
-	node->type = AST_UNARY;
-	node->unary.op = op;
-	node->unary.operand = operand;
 
-	return node;
-}

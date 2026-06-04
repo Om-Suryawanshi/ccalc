@@ -55,14 +55,30 @@ static ASTNode *parse_factor(Parser *p)
 		return expr;
 	}
 
-	parser_error("Expected number of '('");
+	parser_error("Expected number or '('");
 
 	return NULL;
 }
 
-static ASTNode *parse_term(Parser *p)
+static ASTNode *parse_power(Parser *p)
 {
 	ASTNode *left = parse_factor(p);
+
+	if(p->current.type == TOKEN_POW)
+	{
+		advance(p);
+
+		ASTNode* right = parse_power(p);
+
+		return ast_binary(TOKEN_POW, left, right);
+	}
+
+	return left;
+}
+
+static ASTNode *parse_term(Parser *p)
+{
+	ASTNode *left = parse_power(p);
 
 	while(p->current.type == TOKEN_MUL || p->current.type == TOKEN_DIV)
 	{
@@ -70,7 +86,7 @@ static ASTNode *parse_term(Parser *p)
 
 		advance(p);
 
-		ASTNode *right = parse_factor(p);
+		ASTNode *right = parse_power(p);
 
 		left = ast_binary(op, left, right);
 	}
@@ -102,18 +118,4 @@ ASTNode *parse(Parser *p)
 	return root;
 }
 
-static ASTNode *parse_power(Parser *p)
-{
-	ASTNode *left = parse_factor(p);
 
-	if(p->current.type == TOKEN_POW)
-	{
-		advance(p);
-
-		ASTNode* right = parse_power(p);
-
-		return ast_binary(TOKEN_POW, left, right);
-	}
-
-	return left;
-}
