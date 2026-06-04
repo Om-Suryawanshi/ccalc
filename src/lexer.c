@@ -53,6 +53,8 @@ Token lexer_next_token(Lexer *l)
 			return (Token){TOKEN_MUL, 0};
 		case '/':
 			return (Token){TOKEN_DIV, 0};
+		case '^':
+			return (Token){TOKEN_POW, 0};
 		case '(':
 			return (Token){TOKEN_LPAREN, 0};
 		case ')':

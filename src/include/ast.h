@@ -6,7 +6,8 @@
 typedef enum
 {
 	AST_NUMBER,
-	AST_BINARY
+	AST_BINARY,
+	AST_UNARY
 } ASTType;
 
 typedef struct ASTNode ASTNode;
@@ -25,12 +26,20 @@ struct ASTNode
 			ASTNode *right;
 			TokenType op;
 		} binary;
+
+		struct
+		{
+			TokenType op;
+			ASTNode *operand;
+		} unary;
 	};
 };
 
 ASTNode *ast_number(double value);
 
 ASTNode *ast_binary(TokenType op, ASTNode *left, ASTNode *right);
+
+ASTNode *ast_unary(TokenType op, ASTNode *operand);
 
 void ast_print(ASTNode *node, int depth);
 

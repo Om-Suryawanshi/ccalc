@@ -32,6 +32,14 @@ void parser_init(Parser *p, const char *source)
 
 static ASTNode *parse_factor(Parser *p)
 {
+
+	if(p->current.type == TOKEN_MINUS)
+	{
+		advance(p);
+
+		return ast_unary(TOKEN_MINUS, parse_factor(p));
+	}
+
 	if (p->current.type == TOKEN_NUMBER)
 	{
 		double value = p->current.value;
@@ -92,4 +100,20 @@ ASTNode *parse(Parser *p)
 		parser_error("Unexprected token after expression");
 
 	return root;
+}
+
+static ASTNode *parse_power(Parser *p)
+{
+	ASTNode *left = parse_factor(p);
+
+	if(p->current.type == TOKEN_POW)
+	{
+		advance(p);
+
+		ASTNode* right = parse_power(p);
+
+		return ast_binary(TOKEN_POW, left, right);
+	}
+
+	return left;
 }

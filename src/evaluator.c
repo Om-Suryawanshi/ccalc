@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "evaluator.h"
 
@@ -30,13 +31,25 @@ double eval(ASTNode *node)
 						exit(EXIT_FAILURE);
 					}
 					return left / right;
+				case TOKEN_POW:
+					return pow(left, right);
 
 				default:
 					fprintf(stderr, "Unknown operator\n");
 					exit(EXIT_FAILURE);
 			}
 		}
-
+		
+		case AST_UNARY:
+		{
+			double value = eval(node->unary.operand);
+			switch(node->unary.op)
+			{
+				case TOKEN_MINUS:
+					return -value;
+			}
+		}
+	
 		default:
 			fprintf(stderr, "Unknown AST node\n");
 			exit(EXIT_FAILURE);

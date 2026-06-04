@@ -45,6 +45,11 @@ void ast_print(ASTNode* node, int depth)
 			printf("%g\n", node->number);
 			break;
 
+		case AST_UNARY:
+			printf("NEG\n");
+			ast_print(node->unary.operand, depth + 1);
+			break;
+
 		case AST_BINARY:
 			switch(node->binary.op)
 			{
@@ -64,6 +69,8 @@ void ast_print(ASTNode* node, int depth)
 				default:
 					printf("?\n");
 			}
+
+				
 		ast_print(node->binary.left, depth + 1);
 		ast_print(node->binary.right, depth + 1);
 
@@ -83,4 +90,14 @@ void ast_free(ASTNode *node)
 	}
 
 	free(node);
+}
+
+ASTNode *ast_unary(TokenType op, ASTNode *operand)
+{
+	ASTNode *node = malloc(sizeof(ASTNode));
+	node->type = AST_UNARY;
+	node->unary.op = op;
+	node->unary.operand = operand;
+
+	return node;
 }

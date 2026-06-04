@@ -6,12 +6,11 @@ int main(int argc, char* argv[])
 {
 	Parser parser;
 
-	parser_init(&parser, "(3 + 4) * 2");
+	parser_init(&parser, "-(3 + 4) * -2");
 
 	ASTNode *root = parse(&parser);
 
 	printf("%g\n", eval(root));
-
 
 	ast_free(root);
 

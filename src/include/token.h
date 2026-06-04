@@ -11,6 +11,8 @@ typedef enum
 	TOKEN_DIV,
 	TOKEN_MUL,
 
+	TOKEN_POW,
+
 	TOKEN_LPAREN,
 	TOKEN_RPAREN,
 
