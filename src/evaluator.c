@@ -56,3 +56,13 @@ double eval(ASTNode *node)
 				
 	}
 }
+
+double evaluate_expression(const char *expr)
+{
+	Parser parser;
+	parser_init(&parser, expr);
+	ASTNode *root = parse(&parser);
+	double result = eval(root);
+	ast_free(root);
+	return result;
+}

@@ -1,18 +1,23 @@
 #include <stdio.h>
-#include "parser.h"
 #include "evaluator.h"
+#include "repl.h"
+#include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char* argv[])
 {
-	Parser parser;
+	if(argc == 2)
+	{
+		printf("%g\n", evaluate_expression(argv[1]));
+		return 0;
+	}
+	else if(argc > 2)
+	{
+		printf("Please wrap your expression in quotes (ex calc \"2 + 3\"). \n");
+		return 1;
+	}
 
-	parser_init(&parser, "-(3 + 4) * -2");
-
-	ASTNode *root = parse(&parser);
-
-	printf("%g\n", eval(root));
-
-	ast_free(root);
+	repl();
 
 	return 0;
 }
