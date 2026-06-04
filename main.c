@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "parser.h"
+#include "evaluator.h"
 
 int main(int argc, char* argv[])
 {
@@ -9,7 +10,8 @@ int main(int argc, char* argv[])
 
 	ASTNode *root = parse(&parser);
 
-	ast_print(root, 0);
+	printf("%g\n", eval(root));
+
 
 	ast_free(root);
 
