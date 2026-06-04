@@ -1,11 +1,17 @@
 #include <stdio.h>
-#include "ast.h"
+#include "parser.h"
 
 int main(int argc, char* argv[])
 {
-	ASTNode* tree = ast_binary(TOKEN_PLUS, ast_number(3), ast_binary(TOKEN_MUL, ast_number(4), ast_number(2)));
+	Parser parser;
 
-	ast_print(tree, 0);
-	//ast_free(tree);
+	parser_init(&parser, "(3 + 4) * 2");
+
+	ASTNode *root = parse(&parser);
+
+	ast_print(root, 0);
+
+	ast_free(root);
+
 	return 0;
 }
